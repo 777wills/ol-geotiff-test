@@ -13,7 +13,7 @@ import { getTopLeft } from 'ol/extent';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import Attribution from 'ol/control/Attribution';
 import * as control from 'ol/control';
-import { olGeoTiff } from '../class/olgeotiff.js'
+import { olGeoTiff } from '../class/olgeotiff.js';
 
 // import Map form ''
 
@@ -26,7 +26,7 @@ export class HomePage {
 
   map;
 
-  constructor() {}
+  constructor() { }
 
   ionViewDidEnter() {
     this.initializeMap();
@@ -46,48 +46,48 @@ export class HomePage {
       matrixIds[z] = z;
     }
 
-    let wmslayer_s2 = new TileLayer({
+    const wmslayer_s2 = new TileLayer({
       source: new WMTS({
-        url: '',
+        url: '/wmts_simple/s2/{TileMatrix}/{TileRow}/{TileCol}.tif',
         layer: '0',
         matrixSet: 'EPSG:4326',
         style: 'default',
         tileGrid: new WMTSTileGrid({
           origin: getTopLeft(projectionExtent),
-          resolutions: resolutions,
-          matrixIds: matrixIds
+          resolutions,
+          matrixIds
         }),
         requestEncoding: 'REST',
         transition: 0,
       })
-    })
-
-    let tile_grid = new WMTSTileGrid({
-      origin: getTopLeft(projectionExtent),
-      resolutions: resolutions,
-      matrixIds: matrixIds
     });
-    let s2maps = new TileLayer({
+
+    const tile_grid = new WMTSTileGrid({
+      origin: getTopLeft(projectionExtent),
+      resolutions,
+      matrixIds
+    });
+    const s2maps = new TileLayer({
       source: new WMTS({
-        layer:'s2cloudless',
-        // attributions:[new Attribution({html:'<a xmlns:dct="http://purl.org/dc/terms/" href="https://s2maps.eu" property="dct:title">Sentinel-2 cloudless - https://s2maps.eu</a> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://eox.at" property="cc:attributionName" rel="cc:attributionURL">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2016 &amp; 2017)'})],
-        matrixSet:'WGS84',
-        format:'image/jpeg',
-        projection:projection,
-        tileGrid:tile_grid,
-        style:'default',
-        wrapX:!0,
-        urls:[
-          "//a.s2maps-tiles.eu/wmts/",
-          "//b.s2maps-tiles.eu/wmts/",
-          "//c.s2maps-tiles.eu/wmts/",
-          "//d.s2maps-tiles.eu/wmts/",
-          "//e.s2maps-tiles.eu/wmts/"
+        layer: 's2cloudless',
+        // attributions: [new Attribution({html: '<a xmlns:dct="http://purl.org/dc/terms/" href="https://s2maps.eu" property="dct:title">Sentinel-2 cloudless - https://s2maps.eu</a> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://eox.at" property="cc:attributionName" rel="cc:attributionURL">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2016 &amp; 2017)'})],
+        matrixSet: 'WGS84',
+        format: 'image/jpeg',
+        projection,
+        tileGrid: tile_grid,
+        style: 'default',
+        wrapX: !0,
+        urls: [
+          '//a.s2maps-tiles.eu/wmts/',
+          '//b.s2maps-tiles.eu/wmts/',
+          '//c.s2maps-tiles.eu/wmts/',
+          '//d.s2maps-tiles.eu/wmts/',
+          '//e.s2maps-tiles.eu/wmts/'
         ]
       })
-    })
+    });
 
-    let map_result_s2 = new Map({
+    const map_result_s2 = new Map({
       target: 's2map',
       layers: [
         s2maps,
@@ -108,43 +108,43 @@ export class HomePage {
     });
 
     // setup datafunctions
-    var datafunctions = {};
-    datafunctions['NDVI'] = function(b) {
-      if(b[1]+b[2]+b[3]+b[4]==0) return 10; // return 10 as nodata value
-      return ( b[4] - b[3] ) / ( b[4] + b[3] ); // otherwise return NDVI
+    let datafunctions: any = {};
+    datafunctions.NDVI = (b: any[]) => {
+      if (b[1] + b[2] + b[3] + b[4] === 0) { return 10; } // return 10 as nodata value
+      return (b[4] - b[3]) / (b[4] + b[3]); // otherwise return NDVI
     };
-    datafunctions['NDI45'] = function(b) {
-      if(b[1]+b[2]+b[3]+b[4]==0) return 10; // return 10 as nodata value
-      return ( b[4] - b[1] ) / ( b[4] + b[1] ); // otherwise return NDVI
+    datafunctions.NDI45 = (b: any[]) => {
+      if (b[1] + b[2] + b[3] + b[4] === 0) { return 10; } // return 10 as nodata value
+      return (b[4] - b[1]) / (b[4] + b[1]); // otherwise return NDVI
     };
 
-  // olGeoTiff setup
-    var olgt_s2map = new olGeoTiff(wmslayer_s2);
+    // olGeoTiff setup
+    let olgt_s2map = new olGeoTiff(wmslayer_s2);
     olgt_s2map.plotOptions.domain = [-0.2, 0.2];
-    olgt_s2map.plotOptions.noDataValue = 10;
+    olgt_s2map.plotOptions.noDataValue = true;
     olgt_s2map.plotOptions.palette = 'blackbody';
-    olgt_s2map.plotOptions.dataFunction = datafunctions['NDVI'];
-    
+    olgt_s2map.plotOptions.dataFunction = datafunctions.NDVI;
 
-  // setup datafunctions
-    var datafunctions = {};
-    datafunctions['NDVI'] = function(b) {
-      if(b[1]+b[2]+b[3]+b[4]==0) return 10; // return 10 as nodata value
-      return ( b[4] - b[3] ) / ( b[4] + b[3] ); // otherwise return NDVI
+
+    // setup datafunctions
+    datafunctions = {};
+    datafunctions.NDVI = (b: any[]) => {
+      if (b[1] + b[2] + b[3] + b[4] === 0) { return 10; } // return 10 as nodata value
+      return (b[4] - b[3]) / (b[4] + b[3]); // otherwise return NDVI
     };
-    datafunctions['NDI45'] = function(b) {
-      if(b[1]+b[2]+b[3]+b[4]==0) return 10; // return 10 as nodata value
-      return ( b[4] - b[1] ) / ( b[4] + b[1] ); // otherwise return NDVI
+    datafunctions.NDI45 = (b: any[]) => {
+      if (b[1] + b[2] + b[3] + b[4] === 0) { return 10; } // return 10 as nodata value
+      return (b[4] - b[1]) / (b[4] + b[1]); // otherwise return NDVI
     };
-  
-  // olGeoTiff setup
-    var olgt_s2map = new olGeoTiff(wmslayer_s2);
+
+    // olGeoTiff setup
+    olgt_s2map = new olGeoTiff(wmslayer_s2);
     olgt_s2map.plotOptions.domain = [-0.2, 0.2];
-    olgt_s2map.plotOptions.noDataValue = 10;
+    olgt_s2map.plotOptions.noDataValue = true;
     olgt_s2map.plotOptions.palette = 'blackbody';
-    olgt_s2map.plotOptions.dataFunction = datafunctions['NDVI'];
+    olgt_s2map.plotOptions.dataFunction = datafunctions.NDVI;
 
-    
+
 
   }
 

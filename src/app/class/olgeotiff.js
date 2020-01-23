@@ -1,6 +1,7 @@
 
 // olGeoTiff class
-import GeoTIFF from 'geotiff';
+
+import { GeoTIFF } from 'libs/geotiff.bundle';
 import * as plotty  from 'plotty'
 import * as olEvents from 'ol/events';
 /**
